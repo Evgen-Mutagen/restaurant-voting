@@ -1,5 +1,6 @@
 package ru.javaops.topjava2.web.user;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -9,8 +10,6 @@ import ru.javaops.topjava2.HasIdAndEmail;
 import ru.javaops.topjava2.repository.UserRepository;
 import ru.javaops.topjava2.web.GlobalExceptionHandler;
 import ru.javaops.topjava2.web.SecurityUtil;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Component
 @AllArgsConstructor
