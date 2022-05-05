@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Dish extends NamedEntity {
 
     @Column(name = "price", nullable = false)
@@ -24,4 +24,10 @@ public class Dish extends NamedEntity {
     @NotNull
     @ToString.Exclude
     private Menu menu;
+
+    public Dish(Integer id, String name, Integer price, Menu menu) {
+        super(id, name);
+        this.price = price;
+        this.menu = menu;
+    }
 }

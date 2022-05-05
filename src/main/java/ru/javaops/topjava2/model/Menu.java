@@ -31,4 +31,10 @@ public class Menu extends BaseEntity {
     @OneToMany(mappedBy = "menu")
     @ToString.Exclude
     private List<Dish> dishes = Collections.emptyList();
+
+    public Menu(Integer id, LocalDate date, Restaurant restaurant) {
+        super(id);
+        this.date = date;
+        this.restaurant = restaurant;
+    }
 }

@@ -17,7 +17,7 @@ public interface MenuRepository extends BaseRepository<Menu> {
     List<Menu> findAll();
 
     @Query("SELECT m FROM Menu m JOIN FETCH m.dishes WHERE m.id =:id")
-    Menu findByIdDish(Integer integer);
+    Menu findByIdDish(int id);
 
     @Transactional
     @Query("SELECT m FROM Menu m JOIN FETCH m.restaurant LEFT JOIN FETCH m.dishes WHERE m.id=:id")
@@ -26,5 +26,4 @@ public interface MenuRepository extends BaseRepository<Menu> {
     @Transactional
     @Query("SELECT DISTINCT m FROM Menu m JOIN FETCH m.restaurant r LEFT JOIN FETCH m.dishes WHERE m.date=:date ORDER BY r.name")
     List<Menu> findAllByDate(LocalDate date);
-
 }

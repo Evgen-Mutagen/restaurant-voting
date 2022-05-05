@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @Table(name = "votes")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public class Vote extends BaseEntity {
     @NotNull
@@ -27,4 +26,10 @@ public class Vote extends BaseEntity {
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private User user;
+
+    public Vote(Integer id, LocalDate date, Restaurant restaurant, User user) {
+        this.date = date;
+        this.restaurant = restaurant;
+        this.user = user;
+    }
 }

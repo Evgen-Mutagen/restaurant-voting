@@ -14,5 +14,4 @@ public interface UserRepository extends BaseRepository<User> {
 
     @Override
     Optional<User> findById(Integer integer);
-
 }

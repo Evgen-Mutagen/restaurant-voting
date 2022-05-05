@@ -11,10 +11,7 @@ public interface VoteRepository extends BaseRepository<Vote> {
     @Override
     int delete(int id);
 
-    @Transactional
-    Vote save(Vote vote);
-
-    Vote findByDateAndUserId(LocalDate date, int userId);
+    Vote findByDateAndUser(LocalDate date, int id);
 
     @Transactional
     @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant r WHERE v.date=:date ORDER BY v.id")
