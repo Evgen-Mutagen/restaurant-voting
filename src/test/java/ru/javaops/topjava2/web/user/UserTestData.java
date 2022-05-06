@@ -8,11 +8,13 @@ import ru.javaops.topjava2.web.MatcherFactory;
 import java.util.Collections;
 import java.util.Date;
 
+import static ru.javaops.topjava2.model.BaseEntity.START_SEQ;
+
 public class UserTestData {
     public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(User.class, "registered", "password");
 
-    public static final int USER_ID = 1;
-    public static final int ADMIN_ID = 2;
+    public static final int USER_ID = START_SEQ;
+    public static final int ADMIN_ID = START_SEQ +1;
     public static final int NOT_FOUND = 100;
     public static final String USER_MAIL = "user@yandex.ru";
     public static final String ADMIN_MAIL = "admin@gmail.com";

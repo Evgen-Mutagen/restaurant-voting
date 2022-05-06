@@ -24,7 +24,7 @@ import static ru.javaops.topjava2.util.validation.ValidationUtil.*;
 @RequestMapping(value = MenuRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class MenuRestController {
-    static final String REST_URL = "/rest/menus";
+    static final String REST_URL = "/api/menus";
     private final MenuRepository menuRepository;
     private final RestaurantRepository restaurantRepository;
 
@@ -80,6 +80,9 @@ public class MenuRestController {
         checkNotFound(menu != null, "id for menu not null");
         int restaurantId = menuTo.getRestaurantId();
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow();
-        menuRepository.save(new Menu(menuTo.getId(), menuTo.getDate(), restaurant));
+        Menu newMenu = new Menu(menuTo.getId(), menuTo.getDate(), restaurant);
+        newMenu.setDate(menuTo.getDate());
+        newMenu.setRestaurant(restaurant);
+        menuRepository.save(newMenu);
     }
 }

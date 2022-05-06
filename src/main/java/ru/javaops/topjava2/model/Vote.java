@@ -1,6 +1,9 @@
 package ru.javaops.topjava2.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,6 +13,7 @@ import java.time.LocalDate;
 @Table(name = "votes")
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString(callSuper = true)
 public class Vote extends BaseEntity {
     @NotNull

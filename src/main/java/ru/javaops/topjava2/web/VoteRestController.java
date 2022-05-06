@@ -36,7 +36,7 @@ public class VoteRestController {
         return voteRepository.findByUser(userId);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/date", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Vote> getByDate(LocalDate date) {
         log.info("get vote for date={}", date);
         return voteRepository.findByDate(date);
