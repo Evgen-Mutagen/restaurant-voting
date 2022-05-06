@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping(value = VoteRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class VoteRestController {
-    static final String REST_URL = "/rest/votes";
+    static final String REST_URL = "/api/profile/votes";
     public static final LocalTime UPDATE_TIME = LocalTime.of(11, 0);
     private final VoteRepository voteRepository;
     private final RestaurantRepository restaurantRepository;

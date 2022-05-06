@@ -24,7 +24,7 @@ import static ru.javaops.topjava2.util.validation.ValidationUtil.*;
 @RequestMapping(value = MenuRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class MenuRestController {
-    static final String REST_URL = "/api/menus";
+    static final String REST_URL = "/api/profile/menus";
     private final MenuRepository menuRepository;
     private final RestaurantRepository restaurantRepository;
 

@@ -20,7 +20,7 @@ import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 @RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class RestaurantController {
-    static final String REST_URL = "/rest/restaurants";
+    static final String REST_URL = "/api/profile/restaurants";
     private final RestaurantRepository restaurantRepository;
 
     public RestaurantController(RestaurantRepository restaurantRepository) {

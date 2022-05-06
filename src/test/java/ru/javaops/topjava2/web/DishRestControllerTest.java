@@ -8,6 +8,7 @@ class DishRestControllerTest extends AbstractControllerTest{
 
     @Test
     void delete() {
+
     }
 
     @Test
