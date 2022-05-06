@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserRepository userRepository;
 
-    @Bean
+    @Autowired
     public UserDetailsService userDetailsService() {
         return email -> {
             log.debug("Authenticating '{}'", email);
