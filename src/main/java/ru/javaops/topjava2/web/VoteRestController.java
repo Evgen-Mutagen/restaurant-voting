@@ -1,6 +1,7 @@
 package ru.javaops.topjava2.web;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -38,7 +39,7 @@ public class VoteRestController {
     }
 
     @GetMapping(path = "/date", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Vote> getByDate(LocalDate date) {
+    public List<Vote> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate date) {
         log.info("get vote for date={}", date);
         return voteRepository.findByDate(date);
     }

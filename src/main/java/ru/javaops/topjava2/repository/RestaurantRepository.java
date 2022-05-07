@@ -16,6 +16,8 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
     @Override
     List<Restaurant> findAll();
 
+    @Override
+    Restaurant getById(Integer integer);
 
     @Transactional
     @Query("SELECT DISTINCT r FROM Restaurant r LEFT JOIN FETCH r.votes v LEFT JOIN FETCH v.user ORDER BY r.id")

@@ -2,6 +2,7 @@ package ru.javaops.topjava2.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import ru.javaops.topjava2.to.NamedTo;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.Set;
 @Table(name = "restaurants")
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString(callSuper = true)
 public class Restaurant extends NamedEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
@@ -23,4 +25,11 @@ public class Restaurant extends NamedEntity {
     @ToString.Exclude
     @JsonIgnore
     private Set<Vote> votes;
+
+    public Restaurant(Integer id, String name) {
+        super(id, name);
+    }
+    public Restaurant(String name) {
+        super(null, name);
+    }
 }

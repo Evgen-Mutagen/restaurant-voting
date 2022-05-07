@@ -12,6 +12,7 @@ import ru.javaops.topjava2.repository.RestaurantRepository;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import static ru.javaops.topjava2.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
@@ -38,6 +39,12 @@ public class RestaurantController {
     public List<Restaurant> getAll() {
         log.info("get all restaurants");
         return restaurantRepository.findAll();
+    }
+
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Optional<Restaurant> getById(@PathVariable int id)  {
+        log.info("get menu id {}", id);
+        return restaurantRepository.findById(id);
     }
 
     @GetMapping(value = "/votes")

@@ -4,15 +4,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.webjars.NotFoundException;
+import ru.javaops.topjava2.model.Dish;
 import ru.javaops.topjava2.repository.DishRepository;
+import ru.javaops.topjava2.util.JsonUtil;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.javaops.topjava2.web.user.UserTestData.ADMIN_MAIL;
 import static ru.javaops.topjava2.web.user.UserTestData.USER_MAIL;
 import static ru.javaops.topjava2.web.util.DishTestData.*;
 
@@ -44,14 +46,32 @@ class DishRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(DISH1));
+                .andExpect(DISH_MATCHER.contentJson(dish1));
     }
 
     @Test
-    void create() {
+    @WithUserDetails(value = USER_MAIL)
+    void create() throws Exception {
+        Dish newDish = getNew();
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newDish)));
+
+        Dish created = DISH_MATCHER.readFromJson(action);
+        int newId = created.id();
+        newDish.setId(newId);
+        DISH_MATCHER.assertMatch(created, newDish);
+        DISH_MATCHER.assertMatch(dishRepository.getById(newId), newDish);
     }
 
     @Test
-    void update() {
+    @WithUserDetails(value = USER_MAIL)
+    void update() throws Exception {
+        Dish updated = getUpdated();
+        perform(MockMvcRequestBuilders.put(REST_URL + DISH1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isNoContent());
+        DISH_MATCHER.assertMatch(dishRepository.getById(DISH1_ID), updated);
     }
 }
