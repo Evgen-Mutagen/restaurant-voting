@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaops.topjava2.model.Dish;
-import ru.javaops.topjava2.model.Menu;
 import ru.javaops.topjava2.repository.DishRepository;
 import ru.javaops.topjava2.repository.MenuRepository;
 import ru.javaops.topjava2.to.DishTo;
@@ -40,16 +39,14 @@ public class DishRestController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Dish get(@PathVariable int id) {
         log.info("get dish with id={}", id);
-        return dishRepository.findByIdMenu(id);
+        return dishRepository.findByDishId(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Dish> create(@Valid @RequestBody DishTo dishTo) {
         log.info("create {}", dishTo);
         checkNew(dishTo);
-        int menuId = dishTo.getMenuId();
-        Menu menu = menuRepository.findById(menuId).orElseThrow();
-        Dish newDish = dishRepository.save(new Dish(dishTo.getId(), dishTo.getName(), dishTo.getPrice(), menu));
+        Dish newDish = dishRepository.save(new Dish(dishTo.getId(), dishTo.getName(), dishTo.getPrice()));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(newDish.getId()).toUri();
@@ -61,15 +58,11 @@ public class DishRestController {
     public void update(@Valid @RequestBody DishTo dishTo, @PathVariable int id) {
         log.info("update {} with id={}", dishTo, id);
         assureIdConsistent(dishTo, id);
-        Dish dish = dishRepository.findByIdMenu(id);
+        Dish dish = dishRepository.findByDishId(id);
         checkNotFound(dish != null, "id for dish not null");
-        Menu menu = dish.getMenu();
-        Integer menuId = menu.getId();
-        int newMenuId = dishTo.getMenuId();
-        if (newMenuId != menuId) {
-            Menu newMenu = menuRepository.findById(newMenuId).orElseThrow();
-            menu = newMenu;
-        }
-        dishRepository.save(new Dish(dishTo.getId(), dishTo.getName(), dishTo.getPrice(), menu));
+        Dish dishNew = new Dish(dishTo.getId(), dishTo.getName(), dishTo.getPrice());
+        dishNew.setName(dishTo.getName());
+        dishNew.setPrice(dishTo.getPrice());
+        dishRepository.save(dishNew);
     }
 }

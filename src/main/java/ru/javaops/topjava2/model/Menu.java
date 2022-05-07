@@ -1,5 +1,6 @@
 package ru.javaops.topjava2.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,19 +23,26 @@ public class Menu extends BaseEntity {
     @NotNull
     private LocalDate date;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     @NotNull
     @ToString.Exclude
     private Restaurant restaurant;
 
-    @OneToMany(mappedBy = "menu")
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "dish_id")
     @ToString.Exclude
-    private List<Dish> dishes = Collections.emptyList();
+    private Dish dish;
 
     public Menu(Integer id, LocalDate date, Restaurant restaurant) {
         super(id);
         this.date = date;
         this.restaurant = restaurant;
+    }
+    public Menu(Integer id, LocalDate date, Restaurant restaurant, Dish dish) {
+        super(id);
+        this.date = date;
+        this.restaurant = restaurant;
+        this.dish = dish;
     }
 }

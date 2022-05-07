@@ -7,8 +7,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.javaops.topjava2.model.Dish;
 import ru.javaops.topjava2.model.Menu;
 import ru.javaops.topjava2.model.Restaurant;
+import ru.javaops.topjava2.repository.DishRepository;
 import ru.javaops.topjava2.repository.MenuRepository;
 import ru.javaops.topjava2.repository.RestaurantRepository;
 import ru.javaops.topjava2.to.MenuTo;
@@ -27,11 +29,14 @@ public class MenuRestController {
     static final String REST_URL = "/api/profile/menus";
     private final MenuRepository menuRepository;
     private final RestaurantRepository restaurantRepository;
+    private final DishRepository dishRepository;
 
-    public MenuRestController(MenuRepository menuRepository, RestaurantRepository restaurantRepository) {
+    public MenuRestController(MenuRepository menuRepository, RestaurantRepository restaurantRepository, DishRepository dishRepository) {
         this.menuRepository = menuRepository;
         this.restaurantRepository = restaurantRepository;
+        this.dishRepository = dishRepository;
     }
+
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -46,9 +51,9 @@ public class MenuRestController {
         return menuRepository.findAll();
     }
 
-    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Menu get(@PathVariable int id) {
-        log.info("get menu with id={}", id);
+    @GetMapping(value = "/{id}")
+    public Menu getRestaurantById(@PathVariable int id) {
+        log.info("get menu id {}", id);
         return menuRepository.findByIdRestaurantAndDish(id);
     }
 
@@ -76,13 +81,16 @@ public class MenuRestController {
     public void update(@Valid @RequestBody MenuTo menuTo, @PathVariable int id) {
         log.info("update {} with id={}", menuTo, id);
         assureIdConsistent(menuTo, id);
-        Menu menu = menuRepository.findByIdDish(id);
+        Menu menu = menuRepository.findByIdRestaurantAndDish(id);
         checkNotFound(menu != null, "id for menu not null");
         int restaurantId = menuTo.getRestaurantId();
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow();
+        int dishId = menuTo.getDishId();
+        Dish dish = dishRepository.findByDishId(dishId);
         Menu newMenu = new Menu(menuTo.getId(), menuTo.getDate(), restaurant);
         newMenu.setDate(menuTo.getDate());
         newMenu.setRestaurant(restaurant);
+        newMenu.setDish(dish);
         menuRepository.save(newMenu);
     }
 }

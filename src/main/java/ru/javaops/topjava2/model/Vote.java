@@ -11,9 +11,9 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "votes")
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString(callSuper = true)
 public class Vote extends BaseEntity {
     @NotNull
@@ -32,6 +32,7 @@ public class Vote extends BaseEntity {
     private User user;
 
     public Vote(Integer id, LocalDate date, Restaurant restaurant, User user) {
+        super(id);
         this.date = date;
         this.restaurant = restaurant;
         this.user = user;

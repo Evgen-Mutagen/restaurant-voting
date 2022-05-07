@@ -46,18 +46,6 @@ public class RestaurantController {
         return restaurantRepository.findAllVotes();
     }
 
-    @GetMapping(value = "/{idVote}")
-    public Restaurant getRestaurantByVote(@PathVariable int idVote) {
-        log.info("get restaurant id {}", idVote);
-        return restaurantRepository.findByIdVotes(idVote);
-    }
-
-    @GetMapping(value = "/{id}")
-    public Restaurant getRestaurantById(@PathVariable int id) {
-        log.info("get restaurant id {}", id);
-        return restaurantRepository.findByIdMenus(id);
-    }
-
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> create(@Valid @RequestBody Restaurant restaurant) {
         log.info("save new restaurant {}", restaurant);

@@ -17,10 +17,13 @@ public class MenuTo extends NamedTo {
 
     @Range(min = 1, max = 1000000)
     private int restaurantId;
+    @Range(min = 1, max = 1000000)
+    private int dishId;
 
-    public MenuTo(Integer id, String name, LocalDate date, int restaurantId) {
+    public MenuTo(Integer id, String name, LocalDate date, int restaurantId, int dishId) {
         super(id, name);
         this.date = date;
         this.restaurantId = restaurantId;
+        this.dishId = dishId;
     }
 }

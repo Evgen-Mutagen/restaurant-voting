@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MenuRestControllerTest extends AbstractControllerTest{
+class MenuRestControllerTest {
 
     @Test
     void delete() {
@@ -12,10 +12,6 @@ class MenuRestControllerTest extends AbstractControllerTest{
 
     @Test
     void getAll() {
-    }
-
-    @Test
-    void get() {
     }
 
     @Test

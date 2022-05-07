@@ -1,6 +1,10 @@
 package ru.javaops.topjava2.model;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -19,15 +23,8 @@ public class Dish extends NamedEntity {
     @NotNull
     private Integer price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id")
-    @NotNull
-    @ToString.Exclude
-    private Menu menu;
-
-    public Dish(Integer id, String name, Integer price, Menu menu) {
+    public Dish(Integer id, String name, Integer price) {
         super(id, name);
         this.price = price;
-        this.menu = menu;
     }
 }

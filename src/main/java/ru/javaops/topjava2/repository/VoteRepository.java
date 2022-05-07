@@ -1,5 +1,6 @@
 package ru.javaops.topjava2.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,6 +8,7 @@ import ru.javaops.topjava2.model.Vote;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface VoteRepository extends BaseRepository<Vote> {
@@ -16,10 +18,10 @@ public interface VoteRepository extends BaseRepository<Vote> {
     Vote findByDateAndUser(LocalDate date, int id);
 
     @Transactional
-    @Query(nativeQuery = true, value = "SELECT v FROM Vote v JOIN FETCH v.restaurant r WHERE v.date=:date ORDER BY v.id")
+    @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant r WHERE v.date=:date ORDER BY v.id")
     List<Vote> findByDate(LocalDate date);
 
-    @Transactional
-    @Query(nativeQuery = true, value = "SELECT v FROM Vote v JOIN FETCH v.restaurant m WHERE v.user.id=:id ORDER BY v.id")
+    @EntityGraph(attributePaths = {"user"})
+    @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant m WHERE v.user.id=:id ORDER BY v.id")
     List<Vote> findByUser(int id);
 }

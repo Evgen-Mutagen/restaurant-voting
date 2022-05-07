@@ -18,13 +18,9 @@ public class DishTo extends NamedTo {
     @Range(min = 1, max = 100000)
     private int price;
 
-    @Range(min = 1, max = 1000000)
-    private int menuId;
-
-    public DishTo(Integer id, String name, LocalDate date, int price, int menuId) {
+    public DishTo(Integer id, String name, LocalDate date, int price) {
         super(id, name);
         this.date = date;
         this.price = price;
-        this.menuId = menuId;
     }
 }

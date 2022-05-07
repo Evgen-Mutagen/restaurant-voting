@@ -1,24 +1,26 @@
 package ru.javaops.topjava2.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "restaurants")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public class Restaurant extends NamedEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("date DESC")
     @ToString.Exclude
-    private List<Menu> menus;
+    @JsonIgnore
+    private Set<Menu> menus;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("date DESC")
     @ToString.Exclude
-    private List<Vote> votes;
+    @JsonIgnore
+    private Set<Vote> votes;
 }
