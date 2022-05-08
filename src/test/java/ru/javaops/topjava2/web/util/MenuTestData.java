@@ -24,7 +24,7 @@ public class MenuTestData {
    public static List<Menu> menus = List.of(menu3, menu2, menu1);
 
     public static Menu getNew() {
-        return new Menu (null,LocalDate.of(2022, 5, 7), restaurant2, dish2);
+        return new Menu (100101,LocalDate.of(2022, 5, 7), restaurant2, dish2);
     }
 
     public static Menu getUpdated() {

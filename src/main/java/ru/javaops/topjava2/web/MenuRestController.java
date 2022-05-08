@@ -1,6 +1,10 @@
 package ru.javaops.topjava2.web;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +29,7 @@ import static ru.javaops.topjava2.util.validation.ValidationUtil.*;
 @RestController
 @RequestMapping(value = MenuRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
+@CacheConfig(cacheNames = "menus")
 public class MenuRestController {
     static final String REST_URL = "/api/profile/menus";
     private final MenuRepository menuRepository;
@@ -40,30 +45,35 @@ public class MenuRestController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void delete(@PathVariable int id) {
         log.info("delete menu with id={}", id);
         menuRepository.delete(id);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @Cacheable
     public List<Menu> getAll() {
         log.info("get all menus");
         return menuRepository.findAll();
     }
 
     @GetMapping(value = "/{id}")
+    @Cacheable
     public Menu getRestaurantById(@PathVariable int id) {
         log.info("get menu id {}", id);
         return menuRepository.findByIdRestaurantAndDish(id);
     }
 
     @GetMapping(path = "/date", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Cacheable
     public List<Menu> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("get menus by date {}", date);
         return menuRepository.findAllByDate(date);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CacheEvict(allEntries = true)
     public ResponseEntity<Menu> create(@Valid @RequestBody MenuTo menuTo) {
         log.info("create {}", menuTo);
         checkNew(menuTo);
@@ -78,6 +88,7 @@ public class MenuRestController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void update(@Valid @RequestBody MenuTo menuTo, @PathVariable int id) {
         log.info("update {} with id={}", menuTo, id);
         assureIdConsistent(menuTo, id);

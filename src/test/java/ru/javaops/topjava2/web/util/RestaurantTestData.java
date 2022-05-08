@@ -16,7 +16,7 @@ public class RestaurantTestData {
     public static List<Restaurant> restaurants = List.of(restaurant3, restaurant2, restaurant1);
 
     public static Restaurant getNew() {
-        return new Restaurant("newRestaurant");
+        return new Restaurant(100102,"newRestaurant");
     }
 
     public static Restaurant getUpdated() {

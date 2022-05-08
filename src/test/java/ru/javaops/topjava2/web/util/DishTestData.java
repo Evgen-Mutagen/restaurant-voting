@@ -12,7 +12,7 @@ import static java.time.LocalDateTime.of;
 import static ru.javaops.topjava2.model.BaseEntity.START_SEQ;
 
 public class DishTestData {
-    public static final MatcherFactory.Matcher<Dish> DISH_MATCHER = MatcherFactory.usingEqualsComparator(Dish.class);
+    public static final MatcherFactory.Matcher<Dish> DISH_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Dish.class);
     public static final int DISH1_ID= 100005;
 
     public static final Dish dish1 = new Dish(DISH1_ID, "Shawarma", 230);
@@ -25,7 +25,7 @@ public class DishTestData {
     List<Dish> dishes = List.of(dish6, dish5, dish4, dish3, dish2, dish1);
 
     public static Dish getNew() {
-        return new Dish (null,"newDIsh", 100 );
+        return new Dish (100100,"newDIsh", 100 );
     }
 
     public static Dish getUpdated() {
