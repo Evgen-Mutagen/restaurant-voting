@@ -1,5 +1,7 @@
 package ru.javaops.topjava2.web.user;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -20,21 +22,29 @@ import java.util.List;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 
+@Tag(name = "Admin profile", description = "Allows you to find, delete, create and edit users")
 @RestController
 @RequestMapping(value = AdminUserController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
-// TODO: cache only most requested data!
 @CacheConfig(cacheNames = "users")
 public class AdminUserController extends AbstractUserController {
 
     static final String REST_URL = "/api/admin/users";
 
+    @Operation(
+            summary = "Get user",
+            description = "Allows you to find user by id"
+    )
     @Override
     @GetMapping("/{id}")
     public ResponseEntity<User> get(@PathVariable int id) {
         return super.get(id);
     }
 
+    @Operation(
+            summary = "Delete user",
+            description = "Allows you to delete user"
+    )
     @Override
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -42,6 +52,10 @@ public class AdminUserController extends AbstractUserController {
         super.delete(id);
     }
 
+    @Operation(
+            summary = "Get all",
+            description = "Allows you to see all users"
+    )
     @GetMapping
     @Cacheable
     public List<User> getAll() {
@@ -49,6 +63,10 @@ public class AdminUserController extends AbstractUserController {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name", "email"));
     }
 
+    @Operation(
+            summary = "Create user",
+            description = "Allows you to create user"
+    )
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @CacheEvict(allEntries = true)
     public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
@@ -61,6 +79,10 @@ public class AdminUserController extends AbstractUserController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @Operation(
+            summary = "Update user",
+            description = "Allows you to edit user"
+    )
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
@@ -70,12 +92,19 @@ public class AdminUserController extends AbstractUserController {
         prepareAndSave(user);
     }
 
+    @Operation(
+            summary = "Get user by email",
+            description = "Allows you to find user by email"
+    )
     @GetMapping("/by-email")
     public ResponseEntity<User> getByEmail(@RequestParam String email) {
         log.info("getByEmail {}", email);
         return ResponseEntity.of(repository.getByEmail(email));
     }
 
+    @Operation(
+            summary = "Enable user"
+    )
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional

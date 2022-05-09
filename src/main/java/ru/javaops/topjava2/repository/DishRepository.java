@@ -1,6 +1,5 @@
 package ru.javaops.topjava2.repository;
 
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.javaops.topjava2.model.Dish;

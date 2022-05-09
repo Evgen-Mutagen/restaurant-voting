@@ -1,5 +1,7 @@
 package ru.javaops.topjava2.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+@Tag(name = "Vote", description = "Allows you to find and vote")
 @RestController
 @RequestMapping(value = VoteRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
@@ -30,6 +33,10 @@ public class VoteRestController {
         this.restaurantRepository = restaurantRepository;
     }
 
+    @Operation(
+            summary = "Get vote by user",
+            description = "Allows you to find vote by id"
+    )
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Vote> getByUser(@AuthenticationPrincipal AuthUser authUser) {
         int userId = authUser.id();
@@ -37,12 +44,20 @@ public class VoteRestController {
         return voteRepository.findByUser(userId);
     }
 
+    @Operation(
+            summary = "Get vote by date",
+            description = "Allows you to find vote by date"
+    )
     @GetMapping(path = "/date", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Vote> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("get vote for date={}", date);
         return voteRepository.findByDate(date);
     }
 
+    @Operation(
+            summary = "Save",
+            description = "Allows you to vote for restaurant"
+    )
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public void save(@RequestParam Integer restaurantId, @AuthenticationPrincipal AuthUser authUser) {

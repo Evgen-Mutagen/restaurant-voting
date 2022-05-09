@@ -1,5 +1,7 @@
 package ru.javaops.topjava2.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +19,7 @@ import java.util.Optional;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 
+@Tag(name = "Restaurant", description = "Allows you to find, delete, create and edit restaurants")
 @RestController
 @RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
@@ -28,6 +31,10 @@ public class RestaurantController {
         this.restaurantRepository = restaurantRepository;
     }
 
+    @Operation(
+            summary = "Delete restaurant",
+            description = "Allows you to delete restaurant"
+    )
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
@@ -35,18 +42,30 @@ public class RestaurantController {
         restaurantRepository.delete(id);
     }
 
+    @Operation(
+            summary = "Get all restaurants",
+            description = "Allows you to see all restaurants"
+    )
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Restaurant> getAll() {
         log.info("get all restaurants");
         return restaurantRepository.findAll();
     }
 
+    @Operation(
+            summary = "Get restaurant",
+            description = "Allows you to find restaurant by id"
+    )
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Optional<Restaurant> getById(@PathVariable int id) {
         log.info("get menu id {}", id);
         return restaurantRepository.findById(id);
     }
 
+    @Operation(
+            summary = "Create restaurant",
+            description = "Allows you to create restaurant"
+    )
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> create(@Valid @RequestBody Restaurant restaurant) {
         log.info("save new restaurant {}", restaurant);
@@ -59,6 +78,10 @@ public class RestaurantController {
         return ResponseEntity.created(uriOfNewResource).body(newRestaurant);
     }
 
+    @Operation(
+            summary = "Update restaurant",
+            description = "Allows you to edit restaurant"
+    )
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {

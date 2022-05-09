@@ -1,9 +1,10 @@
 package ru.javaops.topjava2.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,11 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static ru.javaops.topjava2.util.validation.ValidationUtil.*;
 
+@Tag(name = "Menu", description = "Allows you to find, delete, create and edit menus")
 @RestController
 @RequestMapping(value = MenuRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
@@ -42,7 +45,10 @@ public class MenuRestController {
         this.dishRepository = dishRepository;
     }
 
-
+    @Operation(
+            summary = "Delete menu",
+            description = "Allows you to delete menu"
+    )
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
@@ -51,6 +57,10 @@ public class MenuRestController {
         menuRepository.delete(id);
     }
 
+    @Operation(
+            summary = "Get all menus",
+            description = "Allows you to see all menus"
+    )
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Cacheable
     public List<Menu> getAll() {
@@ -58,13 +68,21 @@ public class MenuRestController {
         return menuRepository.findAll();
     }
 
+    @Operation(
+            summary = "Get menu",
+            description = "Allows you to find menu by id"
+    )
     @GetMapping(value = "/{id}")
     @Cacheable
-    public Menu getRestaurantById(@PathVariable int id) {
+    public Optional<Menu> getRestaurantById(@PathVariable int id) {
         log.info("get menu id {}", id);
         return menuRepository.findByIdRestaurantAndDish(id);
     }
 
+    @Operation(
+            summary = "Get menu by date",
+            description = "Allows you to find menu by id"
+    )
     @GetMapping(path = "/date", produces = MediaType.APPLICATION_JSON_VALUE)
     @Cacheable
     public List<Menu> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
@@ -72,6 +90,10 @@ public class MenuRestController {
         return menuRepository.findAllByDate(date);
     }
 
+    @Operation(
+            summary = "Create menu",
+            description = "Allows you to create new menu"
+    )
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @CacheEvict(allEntries = true)
     public ResponseEntity<Menu> create(@Valid @RequestBody MenuTo menuTo) {
@@ -86,14 +108,18 @@ public class MenuRestController {
         return ResponseEntity.created(uriOfNewResource).body(newMenu);
     }
 
+    @Operation(
+            summary = "Update menu",
+            description = "Allows you to edit menu"
+    )
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
     public void update(@Valid @RequestBody MenuTo menuTo, @PathVariable int id) {
         log.info("update {} with id={}", menuTo, id);
         assureIdConsistent(menuTo, id);
-        Menu menu = menuRepository.findByIdRestaurantAndDish(id);
-        checkNotFound(menu != null, "id for menu not null");
+        Optional<Menu> menu = menuRepository.findByIdRestaurantAndDish(id);
+        checkNotFound(menu.isPresent(), "id for menu not null");
         int restaurantId = menuTo.getRestaurantId();
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow();
         int dishId = menuTo.getDishId();

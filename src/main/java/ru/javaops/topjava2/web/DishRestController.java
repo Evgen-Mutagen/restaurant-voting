@@ -1,5 +1,7 @@
 package ru.javaops.topjava2.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +17,7 @@ import java.net.URI;
 
 import static ru.javaops.topjava2.util.validation.ValidationUtil.*;
 
+@Tag(name="Dish", description="Allows you to find, delete, create and edit dishes")
 @RestController
 @RequestMapping(value = DishRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
@@ -26,6 +29,10 @@ public class DishRestController {
         this.dishRepository = dishRepository;
     }
 
+    @Operation(
+            summary = "Delete dish",
+            description="Allows you to delete dish"
+    )
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
@@ -33,12 +40,20 @@ public class DishRestController {
         dishRepository.delete(id);
     }
 
+    @Operation(
+            summary = "Get dish",
+            description="Allows you to find dish by id"
+    )
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Dish get(@PathVariable int id) {
         log.info("get dish with id={}", id);
         return dishRepository.findByDishId(id);
     }
 
+    @Operation(
+            summary = "Create dish",
+            description="Allows you to create new dish"
+    )
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Dish> create(@Valid @RequestBody DishTo dishTo) {
         log.info("create {}", dishTo);
@@ -50,6 +65,10 @@ public class DishRestController {
         return ResponseEntity.created(uriOfNewResource).body(newDish);
     }
 
+    @Operation(
+            summary = "Update dish",
+            description="Allows you to edit price and name for dish"
+    )
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody DishTo dishTo, @PathVariable int id) {

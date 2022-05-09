@@ -13,7 +13,6 @@ VALUES ('Bistro'),
        ('Japanese'),
        ('Georgian');
 
-
 INSERT INTO DISHES (name, price)
 VALUES ('Shawarma', 230),   -- 100005
        ('Pita', 180),       -- 100006
@@ -43,8 +42,6 @@ VALUES ('2022-04-28', 100002, 100005),
        ('2022-05-01', 100004, 100015),
        ('2022-05-01', 100004, 100009),
        ('2022-05-01', 100004, 100014);
-
-
 
 INSERT INTO VOTES (date, user_id, restaurant_id)
 VALUES ('2022-04-28', 100000, 100002),

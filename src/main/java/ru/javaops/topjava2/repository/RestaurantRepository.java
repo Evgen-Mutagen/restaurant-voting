@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import ru.javaops.topjava2.model.Restaurant;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RestaurantRepository extends BaseRepository<Restaurant> {
@@ -14,5 +15,5 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
     List<Restaurant> findAll();
 
     @Override
-    Restaurant getById(Integer integer);
+    Optional<Restaurant> findById(Integer id);
 }
