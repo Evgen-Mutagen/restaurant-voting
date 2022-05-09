@@ -17,6 +17,7 @@ public class MenuTo extends NamedTo {
 
     @Range(min = 1, max = 1000000)
     private int restaurantId;
+
     @Range(min = 1, max = 1000000)
     private int dishId;
 

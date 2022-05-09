@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Entity
 @Table(name = "dishes")
@@ -19,11 +20,10 @@ import javax.validation.constraints.NotNull;
 public class Dish extends NamedEntity {
 
     @Column(name = "price", nullable = false)
-    @Range(min = 1, max = 10000000)
-    @NotNull
-    private Integer price;
+    @PositiveOrZero
+    private int price;
 
-    public Dish(Integer id, String name, Integer price) {
+    public Dish(Integer id, String name, int price) {
         super(id, name);
         this.price = price;
     }

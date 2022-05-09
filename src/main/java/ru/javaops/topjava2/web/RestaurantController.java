@@ -42,15 +42,9 @@ public class RestaurantController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Optional<Restaurant> getById(@PathVariable int id)  {
+    public Optional<Restaurant> getById(@PathVariable int id) {
         log.info("get menu id {}", id);
         return restaurantRepository.findById(id);
-    }
-
-    @GetMapping(value = "/votes")
-    public List<Restaurant> getAllByVote() {
-        log.info("get all restaurants by votes");
-        return restaurantRepository.findAllVotes();
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

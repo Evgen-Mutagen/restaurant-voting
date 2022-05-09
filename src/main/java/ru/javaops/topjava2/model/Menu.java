@@ -1,13 +1,10 @@
 package ru.javaops.topjava2.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -39,6 +36,7 @@ public class Menu extends BaseEntity {
         this.date = date;
         this.restaurant = restaurant;
     }
+
     public Menu(Integer id, LocalDate date, Restaurant restaurant, Dish dish) {
         super(id);
         this.date = date;

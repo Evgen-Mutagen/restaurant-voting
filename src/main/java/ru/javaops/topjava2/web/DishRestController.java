@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaops.topjava2.model.Dish;
 import ru.javaops.topjava2.repository.DishRepository;
-import ru.javaops.topjava2.repository.MenuRepository;
 import ru.javaops.topjava2.to.DishTo;
 
 import javax.validation.Valid;
@@ -22,11 +21,9 @@ import static ru.javaops.topjava2.util.validation.ValidationUtil.*;
 public class DishRestController {
     static final String REST_URL = "/api/profile/dishes";
     private final DishRepository dishRepository;
-    private final MenuRepository menuRepository;
 
-    public DishRestController(DishRepository dishRepository, MenuRepository menuRepository) {
+    public DishRestController(DishRepository dishRepository) {
         this.dishRepository = dishRepository;
-        this.menuRepository = menuRepository;
     }
 
     @DeleteMapping(value = "/{id}")

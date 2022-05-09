@@ -15,7 +15,6 @@ import ru.javaops.topjava2.repository.VoteRepository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping(value = VoteRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,7 +38,7 @@ public class VoteRestController {
     }
 
     @GetMapping(path = "/date", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Vote> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate date) {
+    public List<Vote> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("get vote for date={}", date);
         return voteRepository.findByDate(date);
     }
@@ -47,15 +46,16 @@ public class VoteRestController {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public void save(@RequestParam Integer restaurantId, @AuthenticationPrincipal AuthUser authUser) {
+        Restaurant restaurant = restaurantRepository.getById(restaurantId);
         int userId = authUser.id();
         LocalDate dateNow = LocalDate.now();
         log.info("user with id={} vote for restaurant with id={}", userId, restaurantId);
         Vote vote = voteRepository.findByDateAndUser(dateNow, userId);
-        Restaurant restaurant = restaurantRepository.getById(restaurantId);
         if (vote == null) {
-            voteRepository.save(new Vote(null, dateNow, restaurant, authUser.getUser()));
+            voteRepository.save(new Vote(dateNow, restaurant, authUser.getUser()));
         } else if (LocalTime.now().isBefore(UPDATE_TIME)) {
             vote.setRestaurant(restaurant);
+            voteRepository.save(vote);
         } else throw new IllegalRequestDataException("Voting time is over");
     }
 }

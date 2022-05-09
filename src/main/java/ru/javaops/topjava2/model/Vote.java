@@ -26,7 +26,7 @@ public class Vote extends BaseEntity {
     private Restaurant restaurant;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private User user;
@@ -35,6 +35,12 @@ public class Vote extends BaseEntity {
         super(id);
         this.date = date;
         this.restaurant = restaurant;
+        this.user = user;
+    }
+
+    public Vote(LocalDate date, Restaurant restaurant, User user) {
+        this.date = date;
+        this.restaurant= restaurant;
         this.user = user;
     }
 }
