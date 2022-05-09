@@ -19,7 +19,7 @@ import java.util.Optional;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 
-@Tag(name = "Restaurant", description = "Allows you to find, delete, create and edit restaurants")
+@Tag(name = "Restaurant-rest-controller", description = "Allows you to find, delete, create and edit restaurants")
 @RestController
 @RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j

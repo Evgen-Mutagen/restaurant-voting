@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-@Tag(name = "Vote", description = "Allows you to find and vote")
+@Tag(name = "Vote-rest-controller", description = "Allows you to find and vote")
 @RestController
 @RequestMapping(value = VoteRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j

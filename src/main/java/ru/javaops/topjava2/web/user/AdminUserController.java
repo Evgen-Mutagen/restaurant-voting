@@ -22,7 +22,7 @@ import java.util.List;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 
-@Tag(name = "Admin profile", description = "Allows you to find, delete, create and edit users")
+@Tag(name="Admin-rest-controller", description="Admin Rest Controller")
 @RestController
 @RequestMapping(value = AdminUserController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j

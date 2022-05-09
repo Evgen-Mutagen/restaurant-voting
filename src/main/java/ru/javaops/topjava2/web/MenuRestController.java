@@ -28,7 +28,7 @@ import java.util.Optional;
 
 import static ru.javaops.topjava2.util.validation.ValidationUtil.*;
 
-@Tag(name = "Menu", description = "Allows you to find, delete, create and edit menus")
+@Tag(name = "Menu-rest-controller", description = "Allows you to find, delete, create and edit menus")
 @RestController
 @RequestMapping(value = MenuRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j

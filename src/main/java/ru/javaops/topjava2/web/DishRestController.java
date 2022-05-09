@@ -17,7 +17,7 @@ import java.net.URI;
 
 import static ru.javaops.topjava2.util.validation.ValidationUtil.*;
 
-@Tag(name="Dish", description="Allows you to find, delete, create and edit dishes")
+@Tag(name="Dish-rest-controller", description="Allows you to find, delete, create and edit dishes")
 @RestController
 @RequestMapping(value = DishRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
