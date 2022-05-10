@@ -59,6 +59,18 @@
             <version>${springdoc.version}</version>
         </dependency>
 
+        <!--Test-->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite-engine</artifactId>
+            <version>1.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite-api</artifactId>
+        </dependency>
+
         <!--cache-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -95,6 +107,7 @@
             <artifactId>jsoup</artifactId>
             <version>1.14.2</version>
         </dependency>
+
     </dependencies>
 
     <build>

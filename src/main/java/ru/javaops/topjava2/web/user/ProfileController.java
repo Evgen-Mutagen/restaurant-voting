@@ -23,7 +23,7 @@ import java.net.URI;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 
-@Tag(name="User-rest-controller", description="User Rest Controller")
+@Tag(name = "User-rest-controller", description = "User Rest Controller")
 @RestController
 @RequestMapping(value = ProfileController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j

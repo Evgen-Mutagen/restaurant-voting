@@ -3,26 +3,26 @@ package ru.javaops.topjava2.to;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.Range;
+import ru.javaops.topjava2.model.BaseEntity;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 
 @Getter
 @Setter
 @ToString
-public class MenuTo extends NamedTo {
+public class MenuTo extends BaseEntity {
     @NotNull
     private LocalDate date;
 
-    @Range(min = 1, max = 1000000)
+    @PositiveOrZero
     private int restaurantId;
-
-    @Range(min = 1, max = 1000000)
+    @PositiveOrZero
     private int dishId;
 
-    public MenuTo(Integer id, String name, LocalDate date, int restaurantId, int dishId) {
-        super(id, name);
+    public MenuTo(Integer id, LocalDate date, int restaurantId, int dishId) {
+        super(id);
         this.date = date;
         this.restaurantId = restaurantId;
         this.dishId = dishId;

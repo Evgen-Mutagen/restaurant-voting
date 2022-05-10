@@ -1,8 +1,10 @@
 package ru.javaops.topjava2.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
-import ru.javaops.topjava2.to.NamedTo;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -29,6 +31,7 @@ public class Restaurant extends NamedEntity {
     public Restaurant(Integer id, String name) {
         super(id, name);
     }
+
     public Restaurant(String name) {
         super(null, name);
     }

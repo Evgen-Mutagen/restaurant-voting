@@ -6,17 +6,17 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.webjars.NotFoundException;
 import ru.javaops.topjava2.model.Dish;
 import ru.javaops.topjava2.repository.DishRepository;
 import ru.javaops.topjava2.util.JsonUtil;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javaops.topjava2.web.user.UserTestData.USER_MAIL;
 import static ru.javaops.topjava2.web.util.DishTestData.*;
+import static ru.javaops.topjava2.web.util.MenuTestData.MENU1_ID;
 
 class DishRestControllerTest extends AbstractControllerTest {
 
@@ -29,7 +29,7 @@ class DishRestControllerTest extends AbstractControllerTest {
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + DISH1_ID))
                 .andExpect(status().isNoContent());
-        assertThrows(NotFoundException.class, () -> dishRepository.findByDishId(DISH1_ID));
+        assertFalse(dishRepository.findByDishId(MENU1_ID).isPresent());
     }
 
     @Test

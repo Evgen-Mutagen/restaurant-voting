@@ -7,7 +7,6 @@ import ru.javaops.topjava2.model.Vote;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface VoteRepository extends BaseRepository<Vote> {

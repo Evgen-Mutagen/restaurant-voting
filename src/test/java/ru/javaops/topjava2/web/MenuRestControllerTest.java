@@ -6,12 +6,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.webjars.NotFoundException;
 import ru.javaops.topjava2.model.Menu;
 import ru.javaops.topjava2.repository.MenuRepository;
 import ru.javaops.topjava2.util.JsonUtil;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,7 +18,7 @@ import static ru.javaops.topjava2.web.user.UserTestData.USER_MAIL;
 import static ru.javaops.topjava2.web.util.MenuTestData.*;
 
 class MenuRestControllerTest extends AbstractControllerTest {
-    private static final String REST_URL = DishRestController.REST_URL + '/';
+    private static final String REST_URL = MenuRestController.REST_URL + '/';
     @Autowired
     protected MenuRepository menuRepository;
 
@@ -28,7 +27,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + MENU1_ID))
                 .andExpect(status().isNoContent());
-        assertThrows(NotFoundException.class, () -> menuRepository.findByIdRestaurantAndDish(MENU1_ID));
+        assertFalse(menuRepository.findByIdRestaurantAndDish(MENU1_ID).isPresent());
     }
 
     @Test
@@ -44,10 +43,10 @@ class MenuRestControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = USER_MAIL)
     void getByDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "date?date=2022-04-28"))
+        perform(MockMvcRequestBuilders.get(REST_URL + "date?date=2022-05-01"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MENU_MATCHER.contentJson(menus));
+                .andExpect(MENU_MATCHER.contentJson(menusDateTest));
     }
 
     @Test

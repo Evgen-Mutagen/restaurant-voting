@@ -1,6 +1,5 @@
 package ru.javaops.topjava2.web.util;
 
-import ru.javaops.topjava2.model.Dish;
 import ru.javaops.topjava2.model.Vote;
 import ru.javaops.topjava2.web.MatcherFactory;
 
@@ -18,9 +17,9 @@ public class VoteTestData {
 
     public static final Vote vote1 = new Vote(VOTE1_ID, LocalDate.of(2022, 4, 28), restaurant1, user);
     public static final Vote vote2 = new Vote(VOTE1_ID + 1, LocalDate.of(2022, 4, 28), restaurant1, admin);
-    public static final Vote vote3 = new Vote(VOTE1_ID + 2, LocalDate.of(2022, 4, 29), restaurant2, user);
-    public static final Vote vote4 = new Vote(VOTE1_ID + 3, LocalDate.of(2022, 4, 29), restaurant3, admin);
+    public static final Vote vote3 = new Vote(VOTE1_ID + 2, LocalDate.of(2022, 5, 1), restaurant2, user);
+    public static final Vote vote4 = new Vote(VOTE1_ID + 3, LocalDate.of(2022, 5, 1), restaurant3, admin);
 
-    public static List<Vote> votes = List.of(vote4, vote3, vote2, vote1);
-
+    public static List<Vote> votes = List.of(vote1, vote2, vote3, vote4);
+    public static List<Vote> votesDateTest = List.of(vote3, vote4);
 }

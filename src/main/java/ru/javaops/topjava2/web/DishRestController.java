@@ -17,7 +17,7 @@ import java.net.URI;
 
 import static ru.javaops.topjava2.util.validation.ValidationUtil.*;
 
-@Tag(name="Dish-rest-controller", description="Allows you to find, delete, create and edit dishes")
+@Tag(name = "Dish-rest-controller", description = "Allows you to find, delete, create and edit dishes")
 @RestController
 @RequestMapping(value = DishRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
@@ -31,7 +31,7 @@ public class DishRestController {
 
     @Operation(
             summary = "Delete dish",
-            description="Allows you to delete dish"
+            description = "Allows you to delete dish"
     )
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -42,17 +42,17 @@ public class DishRestController {
 
     @Operation(
             summary = "Get dish",
-            description="Allows you to find dish by id"
+            description = "Allows you to find dish by id"
     )
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Dish get(@PathVariable int id) {
         log.info("get dish with id={}", id);
-        return dishRepository.findByDishId(id);
+        return dishRepository.findByDishId(id).orElseThrow();
     }
 
     @Operation(
             summary = "Create dish",
-            description="Allows you to create new dish"
+            description = "Allows you to create new dish"
     )
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Dish> create(@Valid @RequestBody DishTo dishTo) {
@@ -67,14 +67,14 @@ public class DishRestController {
 
     @Operation(
             summary = "Update dish",
-            description="Allows you to edit price and name for dish"
+            description = "Allows you to edit price and name for dish"
     )
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody DishTo dishTo, @PathVariable int id) {
         log.info("update {} with id={}", dishTo, id);
         assureIdConsistent(dishTo, id);
-        Dish dish = dishRepository.findByDishId(id);
+        Dish dish = dishRepository.findByDishId(id).orElseThrow();
         checkNotFound(dish != null, "id for dish not null");
         Dish dishNew = new Dish(dishTo.getId(), dishTo.getName(), dishTo.getPrice());
         dishNew.setName(dishTo.getName());

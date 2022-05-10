@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaops.topjava2.model.Dish;
@@ -26,7 +27,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static ru.javaops.topjava2.util.validation.ValidationUtil.*;
+import static ru.javaops.topjava2.util.validation.ValidationUtil.assureIdConsistent;
+import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 
 @Tag(name = "Menu-rest-controller", description = "Allows you to find, delete, create and edit menus")
 @RestController
@@ -96,11 +98,12 @@ public class MenuRestController {
     )
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @CacheEvict(allEntries = true)
+    @Transactional(readOnly = true)
     public ResponseEntity<Menu> create(@Valid @RequestBody MenuTo menuTo) {
         log.info("create {}", menuTo);
         checkNew(menuTo);
         int restaurantId = menuTo.getRestaurantId();
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow();
+        Restaurant restaurant = restaurantRepository.findByRestId(restaurantId).orElse(null);
         Menu newMenu = menuRepository.save(new Menu(menuTo.getId(), menuTo.getDate(), restaurant));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -115,15 +118,14 @@ public class MenuRestController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
+    @Transactional(readOnly = true)
     public void update(@Valid @RequestBody MenuTo menuTo, @PathVariable int id) {
         log.info("update {} with id={}", menuTo, id);
         assureIdConsistent(menuTo, id);
-        Optional<Menu> menu = menuRepository.findByIdRestaurantAndDish(id);
-        checkNotFound(menu.isPresent(), "id for menu not null");
         int restaurantId = menuTo.getRestaurantId();
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow();
+        Restaurant restaurant = restaurantRepository.findByRestId(restaurantId).orElse(null);
         int dishId = menuTo.getDishId();
-        Dish dish = dishRepository.findByDishId(dishId);
+        Dish dish = dishRepository.findByDishId(dishId).orElse(null);
         Menu newMenu = new Menu(menuTo.getId(), menuTo.getDate(), restaurant);
         newMenu.setDate(menuTo.getDate());
         newMenu.setRestaurant(restaurant);

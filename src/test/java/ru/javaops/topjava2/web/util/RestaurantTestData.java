@@ -13,10 +13,10 @@ public class RestaurantTestData {
     public static final Restaurant restaurant2 = new Restaurant(RESTAURANT1_ID + 1, "Japanese");
     public static final Restaurant restaurant3 = new Restaurant(RESTAURANT1_ID + 2, "Georgian");
 
-    public static List<Restaurant> restaurants = List.of(restaurant3, restaurant2, restaurant1);
+    public static List<Restaurant> restaurants = List.of(restaurant1, restaurant2, restaurant3);
 
     public static Restaurant getNew() {
-        return new Restaurant(100102,"newRestaurant");
+        return new Restaurant(null, "newRestaurant");
     }
 
     public static Restaurant getUpdated() {
