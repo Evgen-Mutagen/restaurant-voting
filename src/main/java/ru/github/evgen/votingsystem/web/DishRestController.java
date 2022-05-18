@@ -46,7 +46,7 @@ public class DishRestController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Dish get(@PathVariable int id) {
         log.info("get dish with id={}", id);
-        return dishRepository.findByDishId(id).orElseThrow();
+        return dishRepository.findById(id).orElseThrow();
     }
 
     @Operation(
@@ -73,7 +73,7 @@ public class DishRestController {
     public void update(@Valid @RequestBody DishTo dishTo, @PathVariable int id) {
         log.info("update {} with id={}", dishTo, id);
         ValidationUtil.assureIdConsistent(dishTo, id);
-        Dish dish = dishRepository.findByDishId(id).orElseThrow();
+        Dish dish = dishRepository.findById(id).orElseThrow();
         ValidationUtil.checkNotFound(dish != null, "id for dish not null");
         Dish dishNew = new Dish(dishTo.getId(), dishTo.getName(), dishTo.getPrice());
         dishNew.setName(dishTo.getName());

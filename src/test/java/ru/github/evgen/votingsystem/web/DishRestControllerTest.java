@@ -29,7 +29,7 @@ class DishRestControllerTest extends AbstractControllerTest {
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + DishTestData.DISH1_ID))
                 .andExpect(status().isNoContent());
-        assertFalse(dishRepository.findByDishId(MenuTestData.MENU1_ID).isPresent());
+        assertFalse(dishRepository.findById(MenuTestData.MENU1_ID).isPresent());
     }
 
     @Test

@@ -27,7 +27,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + MenuTestData.MENU1_ID))
                 .andExpect(status().isNoContent());
-        assertFalse(menuRepository.findByIdRestaurantAndDish(MenuTestData.MENU1_ID).isPresent());
+        assertFalse(menuRepository.findByIdWithRestaurantAndDish(MenuTestData.MENU1_ID).isPresent());
     }
 
     @Test

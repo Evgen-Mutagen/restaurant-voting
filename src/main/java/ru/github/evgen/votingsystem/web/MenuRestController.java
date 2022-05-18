@@ -65,7 +65,7 @@ public class MenuRestController {
     @Cacheable
     public List<Menu> getAll() {
         log.info("get all menus");
-        return menuRepository.findAll();
+        return menuRepository.findAllWithRestaurantAndDish();
     }
 
     @Operation(
@@ -76,7 +76,7 @@ public class MenuRestController {
     @Cacheable
     public Optional<Menu> getRestaurantById(@PathVariable int id) {
         log.info("get menu id {}", id);
-        return menuRepository.findByIdRestaurantAndDish(id);
+        return menuRepository.findByIdWithRestaurantAndDish(id);
     }
 
     @Operation(
@@ -101,7 +101,7 @@ public class MenuRestController {
         log.info("create {}", menuTo);
         ValidationUtil.checkNew(menuTo);
         int restaurantId = menuTo.getRestaurantId();
-        Restaurant restaurant = restaurantRepository.findByRestId(restaurantId).orElse(null);
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
         Menu newMenu = menuRepository.save(new Menu(menuTo.getId(), menuTo.getDate(), restaurant));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -121,9 +121,9 @@ public class MenuRestController {
         log.info("update {} with id={}", menuTo, id);
         ValidationUtil.assureIdConsistent(menuTo, id);
         int restaurantId = menuTo.getRestaurantId();
-        Restaurant restaurant = restaurantRepository.findByRestId(restaurantId).orElse(null);
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
         int dishId = menuTo.getDishId();
-        Dish dish = dishRepository.findByDishId(dishId).orElse(null);
+        Dish dish = dishRepository.findById(dishId).orElse(null);
         Menu newMenu = new Menu(menuTo.getId(), menuTo.getDate(), restaurant);
         newMenu.setDate(menuTo.getDate());
         newMenu.setRestaurant(restaurant);
