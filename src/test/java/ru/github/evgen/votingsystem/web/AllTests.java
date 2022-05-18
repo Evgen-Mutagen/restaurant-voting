@@ -5,7 +5,7 @@ import org.junit.platform.suite.api.SelectPackages;
 import org.junit.platform.suite.api.Suite;
 
 @Suite
-@SelectPackages({"ru.javaops.topjava2.web.user"})
+@SelectPackages({"ru.github.evgen.votingsystem.web.user"})
 @SelectClasses({
         DishRestControllerTest.class,
         MenuRestControllerTest.class,
