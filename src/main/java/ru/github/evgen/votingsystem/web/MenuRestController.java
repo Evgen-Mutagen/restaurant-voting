@@ -10,17 +10,16 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.github.evgen.votingsystem.model.Dish;
+import ru.github.evgen.votingsystem.model.Menu;
+import ru.github.evgen.votingsystem.model.Restaurant;
 import ru.github.evgen.votingsystem.repository.DishRepository;
 import ru.github.evgen.votingsystem.repository.MenuRepository;
 import ru.github.evgen.votingsystem.repository.RestaurantRepository;
 import ru.github.evgen.votingsystem.to.MenuTo;
 import ru.github.evgen.votingsystem.util.validation.ValidationUtil;
-import ru.github.evgen.votingsystem.model.Dish;
-import ru.github.evgen.votingsystem.model.Menu;
-import ru.github.evgen.votingsystem.model.Restaurant;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -96,13 +95,14 @@ public class MenuRestController {
     )
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @CacheEvict(allEntries = true)
-    @Transactional(readOnly = true)
     public ResponseEntity<Menu> create(@Valid @RequestBody MenuTo menuTo) {
         log.info("create {}", menuTo);
         ValidationUtil.checkNew(menuTo);
         int restaurantId = menuTo.getRestaurantId();
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        Menu newMenu = menuRepository.save(new Menu(menuTo.getId(), menuTo.getDate(), restaurant));
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow();
+        int dishId = menuTo.getDishId();
+        Dish dish = dishRepository.findById(dishId).orElseThrow();
+        Menu newMenu = menuRepository.save(new Menu(menuTo.getId(), menuTo.getDate(), restaurant, dish));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(newMenu.getId()).toUri();
@@ -116,15 +116,14 @@ public class MenuRestController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
-    @Transactional(readOnly = true)
     public void update(@Valid @RequestBody MenuTo menuTo, @PathVariable int id) {
         log.info("update {} with id={}", menuTo, id);
         ValidationUtil.assureIdConsistent(menuTo, id);
         int restaurantId = menuTo.getRestaurantId();
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow();
         int dishId = menuTo.getDishId();
-        Dish dish = dishRepository.findById(dishId).orElse(null);
-        Menu newMenu = new Menu(menuTo.getId(), menuTo.getDate(), restaurant);
+        Dish dish = dishRepository.findById(dishId).orElseThrow();
+        Menu newMenu = new Menu(menuTo.getId(), menuTo.getDate(), restaurant, dish);
         newMenu.setDate(menuTo.getDate());
         newMenu.setRestaurant(restaurant);
         newMenu.setDish(dish);

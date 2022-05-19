@@ -8,10 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.github.evgen.votingsystem.repository.DishRepository;
-import ru.github.evgen.votingsystem.util.validation.ValidationUtil;
 import ru.github.evgen.votingsystem.model.Dish;
+import ru.github.evgen.votingsystem.repository.DishRepository;
 import ru.github.evgen.votingsystem.to.DishTo;
+import ru.github.evgen.votingsystem.util.validation.ValidationUtil;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -73,8 +73,7 @@ public class DishRestController {
     public void update(@Valid @RequestBody DishTo dishTo, @PathVariable int id) {
         log.info("update {} with id={}", dishTo, id);
         ValidationUtil.assureIdConsistent(dishTo, id);
-        Dish dish = dishRepository.findById(id).orElseThrow();
-        ValidationUtil.checkNotFound(dish != null, "id for dish not null");
+        ValidationUtil.checkNotFound(true, "This dish doesn't exist");
         Dish dishNew = new Dish(dishTo.getId(), dishTo.getName(), dishTo.getPrice());
         dishNew.setName(dishTo.getName());
         dishNew.setPrice(dishTo.getPrice());

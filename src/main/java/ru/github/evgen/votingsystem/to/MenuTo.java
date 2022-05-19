@@ -18,6 +18,7 @@ public class MenuTo extends BaseEntity {
 
     @PositiveOrZero
     private int restaurantId;
+
     @PositiveOrZero
     private int dishId;
 
