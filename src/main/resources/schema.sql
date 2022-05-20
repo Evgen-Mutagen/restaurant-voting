@@ -40,6 +40,7 @@ CREATE TABLE dishes
     name  VARCHAR(255) NOT NULL,
     price INTEGER      NOT NULL
 );
+CREATE UNIQUE INDEX dishes_unique_name_price_idx ON dishes (name, price);
 
 CREATE TABLE menus
 (
