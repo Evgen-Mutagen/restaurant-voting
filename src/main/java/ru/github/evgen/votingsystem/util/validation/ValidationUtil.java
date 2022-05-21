@@ -43,4 +43,10 @@ public class ValidationUtil {
             throw new NotFoundException("Not found entity with " + msg);
         }
     }
+
+    public static void checkIdenticalId(Integer id1, Integer id2) {
+        if (id1.equals(id2)) {
+            throw new IllegalRequestDataException("It's the same id");
+        }
+    }
 }

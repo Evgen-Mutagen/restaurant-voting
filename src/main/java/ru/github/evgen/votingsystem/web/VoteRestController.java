@@ -14,6 +14,7 @@ import ru.github.evgen.votingsystem.error.IllegalRequestDataException;
 import ru.github.evgen.votingsystem.model.Restaurant;
 import ru.github.evgen.votingsystem.model.Vote;
 import ru.github.evgen.votingsystem.repository.VoteRepository;
+import ru.github.evgen.votingsystem.util.validation.ValidationUtil;
 
 import javax.persistence.EntityManager;
 import java.net.URI;
@@ -27,7 +28,7 @@ import java.util.List;
 @Slf4j
 public class VoteRestController {
     static final String REST_URL = "/api/profile/votes";
-    public static final LocalTime UPDATE_TIME = LocalTime.of(11, 0);
+    public static final LocalTime UPDATE_TIME = LocalTime.of(23, 0);
     private final VoteRepository voteRepository;
     private final EntityManager em;
 
@@ -90,7 +91,9 @@ public class VoteRestController {
         if (vote == null) {
             throw new IllegalRequestDataException("Need create new vote");
         } else if (LocalTime.now().isBefore(UPDATE_TIME)) {
+            Integer oldId = vote.getRestaurant().getId();
             vote.setRestaurant(restaurant);
+            ValidationUtil.checkIdenticalId(restaurant.id(), oldId);
             voteRepository.save(vote);
         } else throw new IllegalRequestDataException("Voting time is over");
     }
