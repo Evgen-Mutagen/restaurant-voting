@@ -21,6 +21,7 @@ import ru.github.evgen.votingsystem.repository.RestaurantRepository;
 import ru.github.evgen.votingsystem.to.MenuTo;
 import ru.github.evgen.votingsystem.util.validation.ValidationUtil;
 
+import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
@@ -37,11 +38,13 @@ public class MenuRestController {
     private final MenuRepository menuRepository;
     private final RestaurantRepository restaurantRepository;
     private final DishRepository dishRepository;
+    private final EntityManager em;
 
-    public MenuRestController(MenuRepository menuRepository, RestaurantRepository restaurantRepository, DishRepository dishRepository) {
+    public MenuRestController(MenuRepository menuRepository, RestaurantRepository restaurantRepository, DishRepository dishRepository, EntityManager em) {
         this.menuRepository = menuRepository;
         this.restaurantRepository = restaurantRepository;
         this.dishRepository = dishRepository;
+        this.em = em;
     }
 
     @Operation(
@@ -98,10 +101,8 @@ public class MenuRestController {
     public ResponseEntity<Menu> create(@Valid @RequestBody MenuTo menuTo) {
         log.info("create {}", menuTo);
         ValidationUtil.checkNew(menuTo);
-        int restaurantId = menuTo.getRestaurantId();
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow();
-        int dishId = menuTo.getDishId();
-        Dish dish = dishRepository.findById(dishId).orElseThrow();
+        Restaurant restaurant = em.find(Restaurant.class, menuTo.getRestaurantId());
+        Dish dish = em.find(Dish.class, menuTo.getDishId());
         Menu newMenu = menuRepository.save(new Menu(menuTo.getId(), menuTo.getDate(), restaurant, dish));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -119,10 +120,8 @@ public class MenuRestController {
     public void update(@Valid @RequestBody MenuTo menuTo, @PathVariable int id) {
         log.info("update {} with id={}", menuTo, id);
         ValidationUtil.assureIdConsistent(menuTo, id);
-        int restaurantId = menuTo.getRestaurantId();
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow();
-        int dishId = menuTo.getDishId();
-        Dish dish = dishRepository.findById(dishId).orElseThrow();
+        Restaurant restaurant = em.find(Restaurant.class, menuTo.getRestaurantId());
+        Dish dish = em.find(Dish.class, menuTo.getDishId());
         Menu newMenu = new Menu(menuTo.getId(), menuTo.getDate(), restaurant, dish);
         newMenu.setDate(menuTo.getDate());
         newMenu.setRestaurant(restaurant);

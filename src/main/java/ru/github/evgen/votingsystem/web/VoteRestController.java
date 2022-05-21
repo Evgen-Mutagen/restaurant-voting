@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.github.evgen.votingsystem.error.IllegalRequestDataException;
 import ru.github.evgen.votingsystem.model.Restaurant;
 import ru.github.evgen.votingsystem.model.Vote;
-import ru.github.evgen.votingsystem.repository.RestaurantRepository;
 import ru.github.evgen.votingsystem.repository.VoteRepository;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -26,11 +26,11 @@ public class VoteRestController {
     static final String REST_URL = "/api/profile/votes";
     public static final LocalTime UPDATE_TIME = LocalTime.of(11, 0);
     private final VoteRepository voteRepository;
-    private final RestaurantRepository restaurantRepository;
+    private final EntityManager em;
 
-    public VoteRestController(VoteRepository voteRepository, RestaurantRepository restaurantRepository) {
+    public VoteRestController(VoteRepository voteRepository, EntityManager em) {
         this.voteRepository = voteRepository;
-        this.restaurantRepository = restaurantRepository;
+        this.em = em;
     }
 
     @Operation(
@@ -61,7 +61,7 @@ public class VoteRestController {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public void save(@RequestParam Integer restaurantId, @AuthenticationPrincipal AuthUser authUser) {
-        Restaurant restaurant = restaurantRepository.getById(restaurantId);
+        Restaurant restaurant = em.find(Restaurant.class, restaurantId);
         int userId = authUser.id();
         LocalDate dateNow = LocalDate.now();
         log.info("user with id={} vote for restaurant with id={}", userId, restaurantId);
