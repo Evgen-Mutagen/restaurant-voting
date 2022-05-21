@@ -14,6 +14,7 @@ import ru.github.evgen.votingsystem.web.util.DishTestData;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.github.evgen.votingsystem.web.user.UserTestData.ADMIN_MAIL;
 import static ru.github.evgen.votingsystem.web.user.UserTestData.USER_MAIL;
 
 class DishRestControllerTest extends AbstractControllerTest {
@@ -33,7 +34,7 @@ class DishRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = USER_MAIL)
+    @WithUserDetails(value = ADMIN_MAIL)
     void create() throws Exception {
         Dish newDish = DishTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
@@ -48,7 +49,7 @@ class DishRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = USER_MAIL)
+    @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
         Dish updated = DishTestData.getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL + DishTestData.DISH1_ID)

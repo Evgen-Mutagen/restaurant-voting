@@ -6,15 +6,16 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.github.evgen.votingsystem.web.util.RestaurantTestData;
 import ru.github.evgen.votingsystem.model.Restaurant;
 import ru.github.evgen.votingsystem.repository.RestaurantRepository;
 import ru.github.evgen.votingsystem.util.JsonUtil;
+import ru.github.evgen.votingsystem.web.util.RestaurantTestData;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.github.evgen.votingsystem.web.user.UserTestData.ADMIN_MAIL;
 import static ru.github.evgen.votingsystem.web.user.UserTestData.USER_MAIL;
 
 class RestaurantControllerTest extends AbstractControllerTest {
@@ -23,7 +24,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     protected RestaurantRepository restaurantRepository;
 
     @Test
-    @WithUserDetails(value = USER_MAIL)
+    @WithUserDetails(value = ADMIN_MAIL)
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + RestaurantTestData.RESTAURANT1_ID))
                 .andExpect(status().isNoContent());
@@ -51,7 +52,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = USER_MAIL)
+    @WithUserDetails(value = ADMIN_MAIL)
     void create() throws Exception {
         Restaurant newRestaurant = RestaurantTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
@@ -66,7 +67,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = USER_MAIL)
+    @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
         Restaurant updated = RestaurantTestData.getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL + RestaurantTestData.RESTAURANT1_ID)

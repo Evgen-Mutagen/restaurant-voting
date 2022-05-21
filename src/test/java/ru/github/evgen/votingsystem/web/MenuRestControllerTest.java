@@ -6,15 +6,15 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.github.evgen.votingsystem.web.util.MenuTestData;
 import ru.github.evgen.votingsystem.model.Menu;
 import ru.github.evgen.votingsystem.repository.MenuRepository;
 import ru.github.evgen.votingsystem.util.JsonUtil;
+import ru.github.evgen.votingsystem.web.util.MenuTestData;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.github.evgen.votingsystem.web.user.UserTestData.ADMIN_MAIL;
 import static ru.github.evgen.votingsystem.web.user.UserTestData.USER_MAIL;
 
 class MenuRestControllerTest extends AbstractControllerTest {
@@ -23,7 +23,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     protected MenuRepository menuRepository;
 
     @Test
-    @WithUserDetails(value = USER_MAIL)
+    @WithUserDetails(value = ADMIN_MAIL)
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + MenuTestData.MENU1_ID))
                 .andExpect(status().isNoContent());
@@ -40,7 +40,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = USER_MAIL)
+    @WithUserDetails(value = ADMIN_MAIL)
     void create() throws Exception {
         Menu newMenu = MenuTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
@@ -55,7 +55,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = USER_MAIL)
+    @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
         Menu updated = MenuTestData.getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL + MenuTestData.MENU1_ID)
