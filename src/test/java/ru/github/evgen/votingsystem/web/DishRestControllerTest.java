@@ -6,13 +6,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.github.evgen.votingsystem.web.util.DishTestData;
-import ru.github.evgen.votingsystem.web.util.MenuTestData;
 import ru.github.evgen.votingsystem.model.Dish;
 import ru.github.evgen.votingsystem.repository.DishRepository;
 import ru.github.evgen.votingsystem.util.JsonUtil;
+import ru.github.evgen.votingsystem.web.util.DishTestData;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,21 +21,6 @@ class DishRestControllerTest extends AbstractControllerTest {
     private static final String REST_URL = DishRestController.REST_URL + '/';
     @Autowired
     protected DishRepository dishRepository;
-
-    @Test
-    @WithUserDetails(value = USER_MAIL)
-    void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL + DishTestData.DISH1_ID))
-                .andExpect(status().isNoContent());
-        assertFalse(dishRepository.findById(MenuTestData.MENU1_ID).isPresent());
-    }
-
-    @Test
-    @WithUserDetails(value = USER_MAIL)
-    void deleteNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL + DishTestData.DISH1_ID))
-                .andExpect(status().isNoContent());
-    }
 
     @Test
     @WithUserDetails(value = USER_MAIL)

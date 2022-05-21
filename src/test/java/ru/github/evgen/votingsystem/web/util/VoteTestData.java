@@ -22,4 +22,8 @@ public class VoteTestData {
 
     public static List<Vote> votes = List.of(vote1, vote2, vote3, vote4);
     public static List<Vote> votesDateTest = List.of(vote3, vote4);
+
+    public static Vote getNew() {
+        return new Vote(null, LocalDate.now(), restaurant1, null);
+    }
 }

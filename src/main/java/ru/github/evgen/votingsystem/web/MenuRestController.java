@@ -15,9 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.github.evgen.votingsystem.model.Dish;
 import ru.github.evgen.votingsystem.model.Menu;
 import ru.github.evgen.votingsystem.model.Restaurant;
-import ru.github.evgen.votingsystem.repository.DishRepository;
 import ru.github.evgen.votingsystem.repository.MenuRepository;
-import ru.github.evgen.votingsystem.repository.RestaurantRepository;
 import ru.github.evgen.votingsystem.to.MenuTo;
 import ru.github.evgen.votingsystem.util.validation.ValidationUtil;
 
@@ -36,14 +34,10 @@ import java.util.Optional;
 public class MenuRestController {
     static final String REST_URL = "/api/profile/menus";
     private final MenuRepository menuRepository;
-    private final RestaurantRepository restaurantRepository;
-    private final DishRepository dishRepository;
     private final EntityManager em;
 
-    public MenuRestController(MenuRepository menuRepository, RestaurantRepository restaurantRepository, DishRepository dishRepository, EntityManager em) {
+    public MenuRestController(MenuRepository menuRepository, EntityManager em) {
         this.menuRepository = menuRepository;
-        this.restaurantRepository = restaurantRepository;
-        this.dishRepository = dishRepository;
         this.em = em;
     }
 
@@ -57,17 +51,6 @@ public class MenuRestController {
     public void delete(@PathVariable int id) {
         log.info("delete menu with id={}", id);
         menuRepository.delete(id);
-    }
-
-    @Operation(
-            summary = "Get all menus",
-            description = "Allows you to see all menus"
-    )
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @Cacheable
-    public List<Menu> getAll() {
-        log.info("get all menus");
-        return menuRepository.findAllWithRestaurantAndDish();
     }
 
     @Operation(
@@ -90,6 +73,18 @@ public class MenuRestController {
     public List<Menu> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("get menus by date {}", date);
         return menuRepository.findAllByDate(date);
+    }
+
+    @Operation(
+            summary = "Get menu by today",
+            description = "Allows you to find menu by today"
+    )
+
+    @GetMapping(path = "/today", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Cacheable
+    public List<Menu> getByToday() {
+        LocalDate today = LocalDate.now();
+        return menuRepository.findAllByDate(today);
     }
 
     @Operation(

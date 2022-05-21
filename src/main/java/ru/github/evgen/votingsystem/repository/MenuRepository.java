@@ -14,11 +14,6 @@ import java.util.Optional;
 public interface MenuRepository extends BaseRepository<Menu> {
 
     @Transactional(readOnly = true)
-    @Query("SELECT m FROM Menu m")
-    @EntityGraph(attributePaths = {"restaurant", "dish"})
-    List<Menu> findAllWithRestaurantAndDish();
-
-    @Transactional(readOnly = true)
     @EntityGraph(attributePaths = {"restaurant", "dish"})
     @Query("SELECT m FROM Menu m WHERE m.id=:id")
     Optional<Menu> findByIdWithRestaurantAndDish(int id);

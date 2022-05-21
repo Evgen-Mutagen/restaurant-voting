@@ -32,16 +32,6 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = USER_MAIL)
-    void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MenuTestData.MENU_MATCHER.contentJson(MenuTestData.menus));
-    }
-
-    @Test
-    @WithUserDetails(value = USER_MAIL)
     void getByDate() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "date?date=2022-05-01"))
                 .andExpect(status().isOk())

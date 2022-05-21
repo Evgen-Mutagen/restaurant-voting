@@ -15,6 +15,7 @@ import ru.github.evgen.votingsystem.util.validation.ValidationUtil;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @Tag(name = "Dish-rest-controller", description = "Allows you to find, delete, create and edit dishes")
 @RestController
@@ -29,17 +30,6 @@ public class DishRestController {
     }
 
     @Operation(
-            summary = "Delete dish",
-            description = "Allows you to delete dish"
-    )
-    @DeleteMapping(value = "/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id) {
-        log.info("delete dish with id={}", id);
-        dishRepository.delete(id);
-    }
-
-    @Operation(
             summary = "Get dish",
             description = "Allows you to find dish by id"
     )
@@ -47,6 +37,16 @@ public class DishRestController {
     public Dish get(@PathVariable int id) {
         log.info("get dish with id={}", id);
         return dishRepository.findById(id).orElseThrow();
+    }
+
+    @Operation(
+            summary = "Get dishes by name",
+            description = "Allows you to find dishes by name"
+    )
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Dish> getByName(@RequestParam(value="name") String name) {
+        log.info("get dish with id={}", name);
+        return dishRepository.findByName(name);
     }
 
     @Operation(

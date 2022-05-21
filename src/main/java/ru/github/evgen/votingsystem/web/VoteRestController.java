@@ -28,7 +28,7 @@ import java.util.List;
 @Slf4j
 public class VoteRestController {
     static final String REST_URL = "/api/profile/votes";
-    public static final LocalTime UPDATE_TIME = LocalTime.of(23, 0);
+    public static LocalTime UPDATE_TIME = LocalTime.of(11, 0);
     private final VoteRepository voteRepository;
     private final EntityManager em;
 
@@ -58,12 +58,12 @@ public class VoteRestController {
         return voteRepository.findByDate(date);
     }
 
+
     @Operation(
             summary = "Save",
             description = "Allows you to vote for restaurant"
     )
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Vote> create(@RequestParam Integer restaurantId, @AuthenticationPrincipal AuthUser authUser) {
         Restaurant restaurant = em.find(Restaurant.class, restaurantId);
         log.info("create vote for {}", restaurantId);

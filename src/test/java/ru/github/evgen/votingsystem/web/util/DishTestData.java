@@ -14,7 +14,12 @@ public class DishTestData {
     public static final Dish dish3 = new Dish(DISH1_ID + 2, "Lemonade", 90);
     public static final Dish dish4 = new Dish(DISH1_ID + 3, "Sushi", 320);
     public static final Dish dish5 = new Dish(DISH1_ID + 4, "Ramen", 280);
-    public static final Dish dish6 = new Dish(DISH1_ID + 4, "Wok", 335);
+    public static final Dish dish6 = new Dish(DISH1_ID + 5, "Wok", 335);
+    public static final Dish dish7 = new Dish(DISH1_ID + 6, "khinkali", 280);
+    public static final Dish dish8 = new Dish(DISH1_ID + 7, "Khachapuri", 230);
+    public static final Dish dish9 = new Dish(DISH1_ID + 8, "Lobio", 290);
+    public static final Dish dish10 = new Dish(DISH1_ID + 8, "Ramen", 310);
+    public static final Dish dish11 = new Dish(DISH1_ID + 8, "Khachapuri", 250);
 
     List<Dish> dishes = List.of(dish6, dish5, dish4, dish3, dish2, dish1);
 

@@ -1,9 +1,6 @@
 package ru.github.evgen.votingsystem.model;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.github.evgen.votingsystem.util.validation.NoHtml;
 
 import javax.persistence.Column;
@@ -16,6 +13,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(callSuper = true)
 public abstract class NamedEntity extends BaseEntity {
 
     @NotBlank
@@ -27,10 +25,5 @@ public abstract class NamedEntity extends BaseEntity {
     protected NamedEntity(Integer id, String name) {
         super(id);
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + '[' + name + ']';
     }
 }
