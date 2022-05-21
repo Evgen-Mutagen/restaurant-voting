@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface VoteRepository extends BaseRepository<Vote> {
 
+    @Transactional(readOnly = true)
     @Query("SELECT v FROM Vote v WHERE v.date=:date AND v.user.id =:id")
     Vote findByDateAndUser(LocalDate date, int id);
 

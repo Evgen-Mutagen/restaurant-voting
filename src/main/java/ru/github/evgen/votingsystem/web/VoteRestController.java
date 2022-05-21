@@ -6,14 +6,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.github.evgen.votingsystem.error.IllegalRequestDataException;
 import ru.github.evgen.votingsystem.model.Restaurant;
 import ru.github.evgen.votingsystem.model.Vote;
 import ru.github.evgen.votingsystem.repository.VoteRepository;
 
 import javax.persistence.EntityManager;
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -58,16 +61,34 @@ public class VoteRestController {
             summary = "Save",
             description = "Allows you to vote for restaurant"
     )
-    @PutMapping
+    @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void save(@RequestParam Integer restaurantId, @AuthenticationPrincipal AuthUser authUser) {
+    public ResponseEntity<Vote> create(@RequestParam Integer restaurantId, @AuthenticationPrincipal AuthUser authUser) {
+        Restaurant restaurant = em.find(Restaurant.class, restaurantId);
+        log.info("create vote for {}", restaurantId);
+        LocalDate dateNow = LocalDate.now();
+        Vote newVote = voteRepository.save(new Vote(dateNow, restaurant, authUser.getUser()));
+        URI uriOfNewResource = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path(REST_URL + "/{Id}")
+                .buildAndExpand(newVote.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(newVote);
+    }
+
+    @Operation(
+            summary = "Update",
+            description = "Allows you to revote for restaurant"
+    )
+    @PutMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@RequestParam Integer restaurantId, @AuthenticationPrincipal AuthUser authUser) {
         Restaurant restaurant = em.find(Restaurant.class, restaurantId);
         int userId = authUser.id();
         LocalDate dateNow = LocalDate.now();
         log.info("user with id={} vote for restaurant with id={}", userId, restaurantId);
         Vote vote = voteRepository.findByDateAndUser(dateNow, userId);
         if (vote == null) {
-            voteRepository.save(new Vote(dateNow, restaurant, authUser.getUser()));
+            throw new IllegalRequestDataException("Need create new vote");
         } else if (LocalTime.now().isBefore(UPDATE_TIME)) {
             vote.setRestaurant(restaurant);
             voteRepository.save(vote);
