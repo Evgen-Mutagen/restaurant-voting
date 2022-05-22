@@ -11,6 +11,7 @@ import ru.github.evgen.votingsystem.util.JsonUtil;
 import ru.github.evgen.votingsystem.web.util.VoteTestData;
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -58,7 +59,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = USER_MAIL)
     void update() throws Exception {
         create();
-        UPDATE_TIME = LocalTime.of(11, 0);
+        UPDATE_TIME = LocalTime.now().plus(10, ChronoUnit.MINUTES);
         perform(MockMvcRequestBuilders.put("/api/profile/votes?restaurantId=" + (RESTAURANT1_ID + 1))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
