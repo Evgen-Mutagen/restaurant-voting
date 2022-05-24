@@ -16,7 +16,7 @@ import java.time.temporal.ChronoUnit;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.github.evgen.votingsystem.web.VoteRestController.UPDATE_TIME;
+import static ru.github.evgen.votingsystem.web.VoteRestController.updateTime;
 import static ru.github.evgen.votingsystem.web.user.UserTestData.USER_MAIL;
 import static ru.github.evgen.votingsystem.web.util.RestaurantTestData.RESTAURANT1_ID;
 
@@ -59,7 +59,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = USER_MAIL)
     void update() throws Exception {
         create();
-        UPDATE_TIME = LocalTime.now().plus(10, ChronoUnit.MINUTES);
+        updateTime = LocalTime.now().plus(10, ChronoUnit.MINUTES);
         perform(MockMvcRequestBuilders.put("/api/profile/votes?restaurantId=" + (RESTAURANT1_ID + 1))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
