@@ -56,7 +56,6 @@ public class RestaurantController {
     )
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Optional<Restaurant> getById(@PathVariable int id) {
-        log.info("get menu id {}", id);
         return restaurantRepository.findById(id);
     }
 
@@ -66,7 +65,6 @@ public class RestaurantController {
     )
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> create(@Valid @RequestBody Restaurant restaurant) {
-        log.info("save new restaurant {}", restaurant);
         ValidationUtil.checkNew(restaurant);
         Restaurant newRestaurant = restaurantRepository.save(restaurant);
         URI uriOfNewResource = ServletUriComponentsBuilder
